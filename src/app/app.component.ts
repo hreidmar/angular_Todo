@@ -3,30 +3,60 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   template: `
-    <!--The content below is only a placeholder and can be replaced.-->
-    <div style="text-align:center" class="content">
-      <h1>
-        Welcome to {{title}}!
-      </h1>
-      <span style="display: block">{{ title }} app is running!</span>
-      <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-    </div>
-    <h2>Here are some links to help you start: </h2>
-    <ul>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-      </li>
-    </ul>
-    
+  
+  <h1> To-Do List<i class="fa fa-plus" aria-hidden="true" (click)="toggleNewTask()"> </i></h1>
+  <div class="newTodo">
+  <input class="newTask" [ngClass]="{ 'hidden': !newTaskOpen}"
+    [(ngModel)]="taskText" placeholder="Enter New Task" 
+    (keyUp.enter)="postTask()"
+  />
+  </div>
+
+  <ul>
+  <app-task 
+    *ngFor="let n of taskList"
+    [task]= 'n'
+    (rekt)="deleteTask(n)"
+    >
+  </app-task>
+  </ul>
   `,
-  styles: []
+  styles: [
+
+  ]
 })
 export class AppComponent {
   title = 'todo';
+  public taskText: string = "";
+  public taskList: Task[] = [];
+  public newTaskOpen: boolean = true;
+
+  public postTask(): void{
+    if (this.taskText.trim() == "") {
+      this.taskText = "";
+      return;
+    }
+    let nTask: Task = {isComplete: false, taskText: this.taskText}
+    this.taskList.push(nTask);
+    this.taskText = "";
+    
+  }
+
+  public deleteTask(task: Task): void{
+    let index = this.taskList.indexOf(task)
+    if (index > -1) {
+      this.taskList.splice(index,1)
+    }
+  }
+
+  public toggleNewTask(): void {
+    this.newTaskOpen = !this.newTaskOpen;
+  }
+
 }
+export class Task {
+  public isComplete: boolean = false;
+  public taskText : string = "";
+}
+
+
