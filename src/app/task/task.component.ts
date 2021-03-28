@@ -6,12 +6,13 @@ import { Task } from '../app.component';
   selector: 'app-task',
   template: `
   <li>
-  <div [class.complete]="task.isComplete">
-    <input type="checkbox" [(ngModel)]="task.isComplete"> 
-    
-    {{ task.taskText }} 
-    <span (click)="deleteTask()"><i class="fa fa-ban"></i></span>
-  </div>
+    <div [class.complete]="task.isComplete">
+      <span (click)="toggleComplete(task)">
+        <input type="checkbox" [(ngModel)]="task.isComplete"> 
+        {{ chunkText(task.taskText) }} 
+      </span>
+    <span class="delBtn" (click)="deleteTask()"><i class="fa fa-ban"></i></span>
+    </div>
   </li>
   `,
   styles: [
@@ -30,6 +31,17 @@ export class TaskComponent implements OnInit {
 
   public deleteTask():void {
     this.rekt.emit()
+  }
+
+  public chunkText(s: string): string {
+    if (s.length > 30) {
+      s = s.slice(0,30) + "..."
+    }
+    return s
+  }
+
+  public toggleComplete(t: Task): void {
+    t.isComplete = !t.isComplete;
   }
 
   ngOnInit(): void {

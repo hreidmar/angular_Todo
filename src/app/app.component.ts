@@ -57,6 +57,7 @@ export class AppComponent {
 export class Task {
   public isComplete: boolean = false;
   public taskText : string = "";
+
 }
 // test
 
